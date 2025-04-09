@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_2" data-name="Layer 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 579.08 579.08">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: none;
+      }
+
+      .cls-2 {
+        fill: #adf9e6;
+      }
+    </style>
+  </defs>
+  <g id="Illustrasjon">
+    <g>
+      <g>
+        <rect class="cls-1" x="36.19" y="36.19" width="506.7" height="506.7"/>
+        <rect class="cls-1" x="18.1" y="18.1" width="542.89" height="542.89"/>
+        <rect class="cls-1" width="579.08" height="579.08"/>
+      </g>
+      <g>
+        <circle class="cls-2" cx="289.54" cy="289.55" r="141.88"/>
+        <g>
+          <g id="_Radial_Repeat_" data-name="&amp;lt;Radial Repeat&amp;gt;">
+            <rect class="cls-2" x="274.52" y="458.66" width="30.05" height="84.23"/>
+          </g>
+          <g id="_Radial_Repeat_-2" data-name="&amp;lt;Radial Repeat&amp;gt;">
+            <rect class="cls-2" x="141.81" y="457.46" width="84.23" height="30.05" transform="translate(-317.23 395.57) rotate(-60.01)"/>
+          </g>
+          <g id="_Radial_Repeat_-3" data-name="&amp;lt;Radial Repeat&amp;gt;">
+            <rect class="cls-2" x="64.49" y="380.14" width="84.23" height="30.05" transform="translate(-183.31 106.25) rotate(-30)"/>
+          </g>
+          <g id="_Radial_Repeat_-4" data-name="&amp;lt;Radial Repeat&amp;gt;">
+            <rect class="cls-2" x="36.19" y="274.53" width="84.23" height="30.05"/>
+          </g>
+          <g id="_Radial_Repeat_-5" data-name="&amp;lt;Radial Repeat&amp;gt;">
+            <rect class="cls-2" x="91.59" y="141.82" width="30.05" height="84.23" transform="translate(-105.99 184.3) rotate(-60)"/>
+          </g>
+          <g id="_Radial_Repeat_-6" data-name="&amp;lt;Radial Repeat&amp;gt;">
+            <rect class="cls-2" x="168.9" y="64.5" width="30.05" height="84.23" transform="translate(-28.67 106.24) rotate(-30)"/>
+          </g>
+          <g id="_Radial_Repeat_-7" data-name="&amp;lt;Radial Repeat&amp;gt;">
+            <rect class="cls-2" x="274.52" y="36.2" width="30.05" height="84.23"/>
+          </g>
+          <g id="_Radial_Repeat_-8" data-name="&amp;lt;Radial Repeat&amp;gt;">
+            <rect class="cls-2" x="353.04" y="91.59" width="84.23" height="30.05" transform="translate(105.28 395.55) rotate(-60.01)"/>
+          </g>
+          <g id="_Radial_Repeat_-9" data-name="&amp;lt;Radial Repeat&amp;gt;">
+            <rect class="cls-2" x="430.36" y="168.91" width="84.23" height="30.05" transform="translate(-28.66 260.89) rotate(-30)"/>
+          </g>
+          <g id="_Radial_Repeat_-10" data-name="&amp;lt;Radial Repeat&amp;gt;">
+            <rect class="cls-2" x="458.66" y="274.52" width="84.23" height="30.05"/>
+          </g>
+          <g id="_Radial_Repeat_-11" data-name="&amp;lt;Radial Repeat&amp;gt;">
+            <rect class="cls-2" x="457.46" y="353.05" width="30.05" height="84.23" transform="translate(-105.99 606.72) rotate(-60)"/>
+          </g>
+          <g id="_Radial_Repeat_-12" data-name="&amp;lt;Radial Repeat&amp;gt;">
+            <rect class="cls-2" x="380.13" y="430.36" width="30.05" height="84.23" transform="translate(-183.3 260.87) rotate(-30)"/>
+          </g>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>

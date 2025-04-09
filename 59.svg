@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_2" data-name="Layer 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 579.08 579.08">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: none;
+      }
+
+      .cls-2 {
+        fill: #aff8e6;
+      }
+    </style>
+  </defs>
+  <g id="Illustrasjon">
+    <g>
+      <g>
+        <rect class="cls-1" x="36.19" y="36.19" width="506.7" height="506.7"/>
+        <rect class="cls-1" x="18.1" y="18.1" width="542.89" height="542.89"/>
+        <rect class="cls-1" width="579.08" height="579.08"/>
+      </g>
+      <path class="cls-2" d="M36.19,36.19v506.7l506.7-158.36v-190.05L36.19,36.19ZM180.96,361.93c-39.97,0-72.39-32.41-72.39-72.39s32.41-72.39,72.39-72.39,72.39,32.41,72.39,72.39-32.41,72.39-72.39,72.39Z"/>
+    </g>
+  </g>
+</svg>

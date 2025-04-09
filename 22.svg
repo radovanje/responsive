@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_2" data-name="Layer 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: none;
+      }
+
+      .cls-2 {
+        fill: #aff8e6;
+      }
+    </style>
+  </defs>
+  <g id="Illustrasjon">
+    <g>
+      <g>
+        <rect class="cls-1" x="25" y="25" width="350" height="350"/>
+        <rect class="cls-1" x="12.5" y="12.5" width="375" height="375"/>
+        <rect class="cls-1" width="400" height="400"/>
+      </g>
+      <g>
+        <path class="cls-2" d="M283.26,189.34v-52.25h62.63v-20.77h-62.63v-62.63h-20.77v62.63h-52.25V24.48h-20.77v91.84h-52.25v-62.63h-20.77v62.63h-62.63v20.77h62.63v52.25H24.62v20.77h91.84v52.25h-62.63v20.77h62.63v62.63h20.77v-62.63h52.25v91.84h20.77v-91.84h52.25v62.63h20.77v-62.63h62.63v-20.77h-62.63v-52.25h91.84v-20.77h-91.84ZM137.22,262.36v-125.26h125.26v125.26h-125.26Z"/>
+        <rect class="cls-2" x="334.21" y="36.17" width="29.21" height="29.21"/>
+        <rect class="cls-2" x="36.3" y="36.17" width="29.21" height="29.21"/>
+        <rect class="cls-2" x="334.21" y="334.07" width="29.21" height="29.21"/>
+        <rect class="cls-2" x="36.3" y="334.07" width="29.21" height="29.21"/>
+      </g>
+    </g>
+  </g>
+</svg>

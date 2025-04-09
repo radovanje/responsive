@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_2" data-name="Layer 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: none;
+      }
+
+      .cls-2 {
+        fill: #aff8e6;
+      }
+    </style>
+  </defs>
+  <g id="Illustrasjon">
+    <g>
+      <g>
+        <rect class="cls-1" x="25" y="25" width="350" height="350"/>
+        <rect class="cls-1" x="12.5" y="12.5" width="375" height="375"/>
+        <rect class="cls-1" width="400" height="400"/>
+      </g>
+      <g>
+        <polygon class="cls-2" points="336.44 142.35 299.24 167.14 249.35 133.9 199.5 167.14 149.63 133.9 99.77 167.14 62.62 142.36 25 174.6 25 286.8 25 374.07 199.53 374.07 374.07 374.07 374.07 286.8 374.07 174.6 336.44 142.35"/>
+        <polygon class="cls-2" points="149.63 107.26 199.5 140.5 249.35 107.26 299.24 140.51 318.96 127.37 199.53 25 80.09 127.38 99.77 140.5 149.63 107.26"/>
+      </g>
+    </g>
+  </g>
+</svg>
