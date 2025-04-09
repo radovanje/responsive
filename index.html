@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>P5.js SVG Flipping Grid - Responsive</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.min.js"></script>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      width: 100%;
+      overflow: hidden;
+      background-color: #00302E;
+    }
+    #p5-container {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .svg-container {
+      position: absolute;
+      perspective: 1000px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      /* Size will be set dynamically */
+    }
+    .svg-card {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      transform-style: preserve-3d;
+      transition: transform 0s;
+      transform-origin: center center;
+    }
+    .svg-front, .svg-back {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      backface-visibility: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+    }
+    .svg-back {
+      transform: rotateY(180deg);
+    }
+    .svg-front svg, .svg-back svg {
+      width: 100%;
+      height: 100%;
+      shape-rendering: geometricPrecision;
+      text-rendering: geometricPrecision;
+      image-rendering: optimizeQuality;
+    }
+    .instruction {
+      position: absolute;
+      bottom: 10px;
+      left: 0;
+      width: 100%;
+      text-align: center;
+      color: white;
+      font-family: Arial, sans-serif;
+      font-size: 16px;
+      pointer-events: none;
+      opacity: 0.7;
+    }
+    @media (max-width: 768px) {
+      .instruction {
+        font-size: 14px;
+        bottom: 5px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="p5-container"></div>
+  <script>
+    let cells = [];
+    let svgElements = [];
+    let validSvgIndices = []; // Track which SVG indices are valid
+    const totalSvgs = 80; // Using all 80 SVGs
+    const initialSvgs = [1, 2, 3, 4]; // Initial SVGs in the grid
+    let width, height;
+    const cols = 2; // 2 columns
+    const rows = 2; // 2 rows
+    let instruction;
+    let cellSize; // Will be calculated based on screen size
+    let minCellSize = 100; // Minimum cell size for very small screens
+
+    function setup() {
+      // Create canvas to fill the container
+      const container = document.getElementById('p5-container');
+      const canvas = createCanvas(windowWidth, windowHeight);
+      canvas.parent(container);
+      
+      width = windowWidth;
+      height = windowHeight;
+      
+      // Add click handler to the canvas for resetting
+      canvas.mousePressed(resetGrid);
+      
+      // Create instruction text
+      instruction = createElement('div', 'Click anywhere to reset the grid');
+      instruction.addClass('instruction');
+      instruction.parent(container);
+      
+      // Calculate cell size based on available space
+      calculateCellSize();
+      
+      // Load all SVGs
+      loadSVGs().then(() => {
+        // After loading, check which SVGs are valid
+        for (let i = 0; i < svgElements.length; i++) {
+          if (svgElements[i] && svgElements[i].trim() !== '') {
+            validSvgIndices.push(i);
+          }
+        }
+        console.log(`Loaded ${validSvgIndices.length} valid SVGs`);
+        
+        // Only create grid after SVGs are loaded and validated
+        createGrid();
+      });
+    }
+
+    function calculateCellSize() {
+      // Calculate cell size based on available screen space
+      // Allow for margins and space between cells
+      const margin = width < 768 ? 5 : 20; // Smaller margin on mobile
+      
+      // Calculate the maximum size that would fit the screen
+      const maxWidthPerCell = (width - margin * (cols + 1)) / cols;
+      const maxHeightPerCell = (height - margin * (rows + 1)) / rows;
+      
+      // Use the smaller dimension to ensure square cells
+      cellSize = min(maxWidthPerCell, maxHeightPerCell);
+      
+      // Ensure cell size is not too small on mobile
+      cellSize = max(cellSize, minCellSize);
+      
+      // But also not too large on desktop
+      cellSize = min(cellSize, 400); // Max cell size of 400px
+    }
+
+    function draw() {
+      background('#00302E');
+      // The SVG rendering is handled by HTML DOM elements
+    }
+
+    function loadSVGs() {
+      const loadPromises = [];
+      
+      for (let i = 1; i <= totalSvgs; i++) {
+        const promise = new Promise((resolve, reject) => {
+          // Fetch the SVG file
+          fetch(`${i}.svg`)
+            .then(response => {
+              if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+              }
+              return response.text();
+            })
+            .then(svgText => {
+              // Check if the SVG content is valid
+              if (svgText && svgText.includes('<svg')) {
+                // Ensure SVG has proper viewBox and preserve aspect ratio
+                let processedSvg = svgText;
+                if (!processedSvg.includes('viewBox') && !processedSvg.includes('width') && !processedSvg.includes('height')) {
+                  // Add viewBox if missing
+                  processedSvg = processedSvg.replace('<svg', '<svg viewBox="0 0 400 400"');
+                }
+                if (!processedSvg.includes('preserveAspectRatio')) {
+                  // Add preserveAspectRatio if missing
+                  processedSvg = processedSvg.replace('<svg', '<svg preserveAspectRatio="xMidYMid meet"');
+                }
+                
+                svgElements[i-1] = processedSvg;
+              } else {
+                throw new Error("Invalid SVG content");
+              }
+              resolve();
+            })
+            .catch(error => {
+              console.error(`Failed to load SVG ${i}:`, error);
+              // Create a plain colored placeholder without text
+              const hue = (i * 37) % 360;
+              const color = `hsl(${hue}, 80%, 60%)`;
+              svgElements[i-1] = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" preserveAspectRatio="xMidYMid meet">
+                <rect width="400" height="400" fill="${color}" />
+              </svg>`;
+              resolve();
+            });
+        });
+        
+        loadPromises.push(promise);
+      }
+      
+      return Promise.all(loadPromises);
+    }
+
+    function getValidSvgIndex(preferredIndex) {
+      // If the preferred index is valid, use it
+      if (validSvgIndices.includes(preferredIndex)) {
+        return preferredIndex;
+      }
+      
+      // Otherwise, return a random valid index
+      if (validSvgIndices.length > 0) {
+        return validSvgIndices[Math.floor(random(validSvgIndices.length))];
+      }
+      
+      // Fallback if no valid SVGs (shouldn't happen with our placeholders)
+      return 0;
+    }
+
+    function createGrid() {
+      // Clear existing cells if any
+      for (let cell of cells) {
+        if (cell.container) {
+          cell.container.remove();
+        }
+      }
+      cells = [];
+      
+      // Calculate the margin between cells (smaller on mobile)
+      const margin = width < 768 ? 5 : 20;
+      
+      // Calculate the total grid width and height
+      const gridWidth = cols * cellSize + (cols - 1) * margin;
+      const gridHeight = rows * cellSize + (rows - 1) * margin;
+      
+      // Centering the grid in the canvas
+      const startX = (width - gridWidth) / 2;
+      const startY = (height - gridHeight) / 2;
+      
+      // Create the 2x2 grid of cells
+      for (let row = 0; row < rows; row++) {
+        for (let col = 0; col < cols; col++) {
+          const x = startX + col * (cellSize + margin);
+          const y = startY + row * (cellSize + margin);
+          
+          // Get the initial image index for this cell
+          const index = row * 2 + col;
+          const svgIndex = initialSvgs[index] - 1;
+          
+          // Create cell
+          const cell = new Cell(x, y, cellSize, cellSize, svgIndex);
+          cells.push(cell);
+        }
+      }
+    }
+
+    function resetGrid() {
+      // Reset each cell to its initial SVG
+      for (let i = 0; i < cells.length; i++) {
+        const initialSvgIndex = initialSvgs[i] - 1;
+        cells[i].resetToSvg(initialSvgIndex);
+      }
+    }
+
+    function windowResized() {
+      resizeCanvas(windowWidth, windowHeight);
+      width = windowWidth;
+      height = windowHeight;
+      
+      // Recalculate cell size based on new window dimensions
+      calculateCellSize();
+      
+      // Calculate the margin between cells (smaller on mobile)
+      const margin = width < 768 ? 5 : 20;
+      
+      // Calculate the total grid width and height
+      const gridWidth = cols * cellSize + (cols - 1) * margin;
+      const gridHeight = rows * cellSize + (rows - 1) * margin;
+      
+      // Centering the grid in the canvas
+      const startX = (width - gridWidth) / 2;
+      const startY = (height - gridHeight) / 2;
+      
+      for (let i = 0; i < cells.length; i++) {
+        const row = Math.floor(i / cols);
+        const col = i % cols;
+        const x = startX + col * (cellSize + margin);
+        const y = startY + row * (cellSize + margin);
+        
+        cells[i].updatePosition(x, y);
+        cells[i].updateSize(cellSize, cellSize);
+      }
+    }
+
+    class Cell {
+      constructor(x, y, w, h, initialSvgIndex) {
+        this.x = x;
+        this.y = y;
+        this.w = w;
+        this.h = h;
+        this.originalSvgIndex = initialSvgIndex; // Store the original index for reset
+        this.currentSvgIndex = initialSvgIndex;
+        this.nextSvgIndex = initialSvgIndex;
+        this.flipping = false;
+        this.hovered = false;
+        this.wasHovered = false;
+        
+        // Create main container
+        this.container = createElement('div');
+        this.container.addClass('svg-container');
+        this.container.position(x, y);
+        this.container.size(w, h);
+        
+        // Create card element (this will rotate)
+        this.card = createElement('div');
+        this.card.addClass('svg-card');
+        this.container.child(this.card);
+        
+        // Create front face
+        this.frontFace = createElement('div');
+        this.frontFace.addClass('svg-front');
+        this.frontFace.html(svgElements[initialSvgIndex]);
+        this.card.child(this.frontFace);
+        
+        // Create back face (initially empty)
+        this.backFace = createElement('div');
+        this.backFace.addClass('svg-back');
+        this.card.child(this.backFace);
+        
+        // Add hover event listeners
+        this.container.mouseOver(this.onMouseOver.bind(this));
+        this.container.mouseOut(this.onMouseOut.bind(this));
+        
+        // Add touch event listeners for mobile
+        this.container.touchStarted(this.onTouchStart.bind(this));
+      }
+      
+      onMouseOver() {
+        this.hovered = true;
+        
+        // Only start flipping if we weren't already hovering
+        if (!this.wasHovered && !this.flipping) {
+          this.startFlip();
+        }
+      }
+      
+      onMouseOut() {
+        this.hovered = false;
+        this.wasHovered = false;
+      }
+      
+      onTouchStart() {
+        // For mobile: treat touch as hover if not already flipping
+        if (!this.flipping) {
+          this.startFlip();
+        }
+        return false; // Prevent default behavior
+      }
+      
+      startFlip() {
+        if (this.flipping) return;
+        
+        this.flipping = true;
+        this.wasHovered = true;
+        
+        // Select a random new SVG that's different from the current one and is valid
+        let newIndex;
+        let attempts = 0;
+        do {
+          newIndex = validSvgIndices[Math.floor(random(validSvgIndices.length))];
+          attempts++;
+          // After 10 attempts, just use any valid index different from current
+          if (attempts > 10) {
+            // Find first valid index that's not the current one
+            for (let i = 0; i < validSvgIndices.length; i++) {
+              if (validSvgIndices[i] !== this.currentSvgIndex) {
+                newIndex = validSvgIndices[i];
+                break;
+              }
+            }
+            // If there's only one valid SVG, just use it
+            if (attempts > 20) {
+              newIndex = validSvgIndices[0];
+              break;
+            }
+          }
+        } while (newIndex === this.currentSvgIndex && validSvgIndices.length > 1);
+        
+        this.nextSvgIndex = newIndex;
+        
+        // Set the back face content to the new SVG
+        this.backFace.html(svgElements[this.nextSvgIndex]);
+        
+        // Adjust transition before starting animation
+        this.card.style('transition', 'transform 0.6s');
+        
+        // Start the rotation - using rotateY for horizontal flip around center axis
+        setTimeout(() => {
+          this.card.style('transform', 'rotateY(180deg)');
+          
+          // Once animation completes
+          setTimeout(() => {
+            // Reset for next flip
+            this.card.style('transition', 'none');
+            this.card.style('transform', 'rotateY(0deg)');
+            
+            // Swap the faces
+            this.frontFace.html(svgElements[this.nextSvgIndex]);
+            this.backFace.html('');
+            
+            // Update the current index
+            this.currentSvgIndex = this.nextSvgIndex;
+            this.flipping = false;
+          }, 600); // Match the transition duration
+        }, 10);
+      }
+      
+      resetToSvg(svgIndex) {
+        if (this.flipping) return; // Don't reset during a flip
+        
+        if (this.currentSvgIndex === svgIndex) return; // Already showing the correct SVG
+        
+        this.flipping = true;
+        
+        // Set the back face content to the original SVG
+        this.backFace.html(svgElements[svgIndex]);
+        
+        // Adjust transition before starting animation
+        this.card.style('transition', 'transform 0.6s');
+        
+        // Start the rotation - using rotateY for horizontal flip around center axis
+        setTimeout(() => {
+          this.card.style('transform', 'rotateY(180deg)');
+          
+          // Once animation completes
+          setTimeout(() => {
+            // Reset for next flip
+            this.card.style('transition', 'none');
+            this.card.style('transform', 'rotateY(0deg)');
+            
+            // Swap the faces
+            this.frontFace.html(svgElements[svgIndex]);
+            this.backFace.html('');
+            
+            // Update the current index
+            this.currentSvgIndex = svgIndex;
+            this.flipping = false;
+            this.wasHovered = false;
+          }, 600); // Match the transition duration
+        }, 10);
+      }
+      
+      updatePosition(x, y) {
+        this.x = x;
+        this.y = y;
+        this.container.position(x, y);
+      }
+      
+      updateSize(w, h) {
+        this.w = w;
+        this.h = h;
+        this.container.size(w, h);
+      }
+    }
+  </script>
+</body>
+</html>
